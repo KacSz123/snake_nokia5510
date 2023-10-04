@@ -1,29 +1,7 @@
+
+#include "snake_ADT.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
-
-typedef struct node
-{
-	bool headFlag;
-	int coords[2];
-	enum
-	{
-		LEFT = 20,
-		RIGHT = 30,
-		UP = 40,
-		DOWN = 60
-	} orientation;
-	struct node *next;
-	struct node *prev;
-
-} node_Typedef;
-
-typedef struct fruit
-{
-	int coords[2];
-} fruit_Typedef;
-
 void addSnakeNode(node_Typedef *h, int x, int y)
 {
 	node_Typedef *node_tmp = h;
@@ -106,23 +84,3 @@ void moveSnake(node_Typedef *h, bool ifEaten, int orient)
 	}
 }
 
-
-int main(void)
-{
-
-
-	node_Typedef *head = (node_Typedef *)malloc(sizeof(node_Typedef));
-	snakeHeadInit(5, 5, head);
-
-	moveSnake(head, 1, UP);
-	moveSnake(head, 0, UP);
-	moveSnake(head, 1, UP);
-	moveSnake(head, 0, UP);
-	moveSnake(head, 1, UP);
-	moveSnake(head, 0, UP);
-	moveSnake(head, 1, UP);
-	moveSnake(head, 0, UP);
-	moveSnake(head, 1, UP);
-
-	return 0;
-}
