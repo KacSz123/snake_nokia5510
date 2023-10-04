@@ -8,7 +8,7 @@
 #ifndef INC_LCD_NOKIA5510_H_
 #define INC_LCD_NOKIA5510_H_
 //#include <stdint.h>
-//#include "spi.h"
+#include "spi.h"
 
 #define LCD_WIDTH 84
 #define LCD_HEIGHT 48
