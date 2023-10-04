@@ -30,8 +30,13 @@
 #define LCD_N5110_FUNSET (0x20|(LCD_ACT_MODE|LCD_VAL_HOR|LCD_ADD_CMD))
 
 
-static uint8_t LCD_NOKIA5510_dataBuffer[LCD_BUFFER_SIZE];
 //SPI_HandleTypeDef spi = hspi2;
+typedef enum LCD
+{
+	 LCD_NOKIA5510_OK=0,
+	 LCD_NOKIA5510_ERROR=1,
+	 LCD_NOKIA5510_UNKNOWN=2
+} LCD_NOKIA5510_TypedefEnum;
 
 /**
  * @brief Reset of lcd with longer sleep time for initialization.
@@ -58,11 +63,14 @@ void LCD_NOKIA5510_cmd(uint8_t cmd);
 
 
 void LCD_NOKIA5510_data(int size);
-void LCD_NOKIA5510_drawPixel(uint8_t x, uint8_t y);
 void LCD_NOKIA5510_drawBitmap();
-void LCD_NOKIA5510_sendDataBuffer();
+
+void LCD_NOKIA5510_drawPixel(uint8_t x, uint8_t y);
+
 void LCD_NOKIA5510_sendData(uint8_t *data, int size);
-void LCD_NOKIA5510_erasePixel();
+void LCD_NOKIA5510_sendDataBuffer();
+
+void LCD_NOKIA5510_erasePixel(uint8_t x, uint8_t y);
 void LCD_NOKIA5510_clearScreen();
 void LCD_NOKIA5510_drawLine2Points(uint8_t x1, uint8_t y1,uint8_t x2, uint8_t y2);
 void LCD_NOKIA5510_drawRectangle();

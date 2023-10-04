@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lcd_nokia5510.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,9 +90,36 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+  LCD_NOKIA5510_resetInit(&hspi1);
 
+//  extern uint8_t LCD_NOKIA5510_dataBuffer[];
+  LCD_NOKIA5510_cmd(0x21);
+  LCD_NOKIA5510_cmd(0x14);
+  LCD_NOKIA5510_cmd(0x80 | 0x2f); //Ustawienie kontrastu
+  LCD_NOKIA5510_cmd(0x20);
+  LCD_NOKIA5510_cmd(0x0c);
+  LCD_NOKIA5510_cmd(0x80);
+  LCD_NOKIA5510_cmd(0x40);
   /* USER CODE END 2 */
 
+  for(int x = 0; x<LCD_WIDTH;x++)
+  {
+	  for(int y = 0; y<LCD_HEIGHT; y++)
+	  {
+
+		  if(x==0||y==0||x==LCD_WIDTH-1||y==LCD_HEIGHT-1)
+		  {
+	      LCD_NOKIA5510_drawPixel(x, y);
+  	  	  HAL_Delay(5);
+  	  	  LCD_NOKIA5510_sendDataBuffer();
+		  HAL_Delay(5);
+		  }
+	  }
+
+//	  lcd_nokia5110_data(sizeof(p2));
+	  LCD_NOKIA5510_sendDataBuffer();
+  }
+  HAL_Delay(1500);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
