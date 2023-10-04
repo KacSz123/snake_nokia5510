@@ -1,4 +1,5 @@
-# Debug
-# Debug/*
-# Release
-# Release/*
+Debug
+Debug/*
+Release
+Release/*
+.gitignore
