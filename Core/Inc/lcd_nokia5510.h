@@ -17,6 +17,7 @@
 #define LCD_BUFFER_SIZE			(LCD_WIDTH * LCD_HEIGHT/PIXEL_SIZE)
 
 
+static uint8_t LCD_NOKIA5510_dataBuffer[LCD_BUFFER_SIZE];
 
 #define LCD_ACT_MODE 0<<2
 #define LCD_POW_D_MODE 1<<2
@@ -28,6 +29,9 @@
 #define LCD_ADD_CMD 1
 
 #define LCD_N5110_FUNSET (0x20|(LCD_ACT_MODE|LCD_VAL_HOR|LCD_ADD_CMD))
+
+#define LCD_Y 5
+#define LCD_N5110_Y_POSE 0x40|LCD_Y
 
 
 //SPI_HandleTypeDef spi = hspi2;
@@ -62,7 +66,7 @@ void LCD_NOKIA5510_cmd(uint8_t cmd);
  */
 
 
-void LCD_NOKIA5510_data(int size);
+//void LCD_NOKIA5510_data(uint8_t*data, int size);
 void LCD_NOKIA5510_drawBitmap();
 
 void LCD_NOKIA5510_drawPixel(uint8_t x, uint8_t y);

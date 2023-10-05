@@ -10,18 +10,20 @@
 #include "gpio.h"
 #include "stdlib.h"
 #include "memory.h"
+
+
 SPI_HandleTypeDef *spi;
+//spi = &
 
-
-
-static uint8_t LCD_NOKIA5510_dataBuffer[LCD_BUFFER_SIZE];
-
-void LCD_NOKIA5510_resetInit(SPI_HandleTypeDef *sp)
+void LCD_NOKIA5510_resetInit(SPI_HandleTypeDef* sp)
 {
 	spi = sp;
 	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_RESET);
 	HAL_Delay(20);
 	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_SET);
+	HAL_Delay(20);
+
+	memset(LCD_NOKIA5510_dataBuffer, 0, LCD_BUFFER_SIZE);
 }
 
 
@@ -36,16 +38,15 @@ void LCD_NOKIA5510_cmd(uint8_t cmd)
 {
 	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(spi, &cmd, 1, HAL_MAX_DELAY);
+	HAL_SPI_Transmit(&hspi1, &cmd, 1, HAL_MAX_DELAY);
 	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET);
 }
-
 void LCD_NOKIA5510_sendData(uint8_t *data, int size)
 {
 	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(spi, data, size, HAL_MAX_DELAY);
+	HAL_SPI_Transmit(&hspi1, data, size, HAL_MAX_DELAY);
 //	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
 }
@@ -54,14 +55,14 @@ void LCD_NOKIA5510_sendDataBuffer()
 {
 	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(spi,LCD_NOKIA5510_dataBuffer , sizeof(LCD_NOKIA5510_dataBuffer), 100);
+	HAL_SPI_Transmit(&hspi1,LCD_NOKIA5510_dataBuffer , LCD_BUFFER_SIZE, 100);
 //	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
 }
 
 void LCD_NOKIA5510_drawPixel(uint8_t x, uint8_t y)
 {
-	LCD_NOKIA5510_dataBuffer[x+(y>>3)*LCD_WIDTH] |= (1<<(y&7));
+	LCD_NOKIA5510_dataBuffer[x+(y>>3)*LCD_WIDTH] |= 1<<(y&7);
 }
 
 

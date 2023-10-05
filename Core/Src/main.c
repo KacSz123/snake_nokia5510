@@ -25,16 +25,216 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "string.h"
+#include "stdbool.h"
+#include <stdlib.h>
+
 #include "lcd_nokia5510.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+//SPI_HandleTypeDef *spi = &hspi1;
+//
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+//// function settings
+////typedef snake
+//#define LCD_WIDTH 84
+//#define LCD_HEIGHT 48
+//#define LCD_BUFFER_SIZE			(LCD_WIDTH * LCD_HEIGHT/8)
+//static uint8_t p2[LCD_BUFFER_SIZE];
+//
+//
+//
+//typedef struct node
+//{
+//	bool headFlag;
+//	int coords[2];
+//	enum{LEFT=20, RIGHT=30, UP=40, DOWN=60} orientation;
+//	struct node *next;
+//	struct node *prev;
+//
+//}node_Typedef;
+//
+//typedef struct fruit
+//{
+//	int coords[2];
+//}fruit_Typedef;
+//
+//void addSnakeNode(node_Typedef *h)
+//{
+//	node_Typedef *node_tmp = h;
+//	while(node_tmp->next != NULL)
+//	{
+//		node_tmp = node_tmp->next;
+//	}
+//	node_tmp->next->coords[0]=node_tmp->coords[0];
+//	node_tmp->next->coords[1]=node_tmp->coords[1];
+//	node_tmp->next->orientation = node_tmp->coords[1];;
+//	node_tmp->next->headFlag=false;
+//	node_tmp->next->prev = node_tmp;
+//	node_tmp->next->next = NULL;
+//}
+//void snakeHeadInit(int x, int y, node_Typedef *n)
+//{
+//	n = (node_Typedef*)malloc(sizeof(node_Typedef));
+//	n->coords[0]=x; n->coords[1]=y;
+//	n->orientation =UP;
+//	n->headFlag=true;
+//	n->next = NULL;
+//	n->prev = NULL;
+//}
+//
+//void removeSnake(node_Typedef *h){};
+//
+//void moveSnake(node_Typedef *h)
+//{
+//	node_Typedef *node_tmp = h;
+//	while(node_tmp->next!=NULL)
+//	{
+//
+//	}
+//}
+//
+//
+//
+//#define LCD_ACT_MODE 0<<2
+//#define LCD_POW_D_MODE 1<<2
+//
+//#define LCD_VAL_HOR 0<<1
+//#define LCD_VAL_VER 1<<1
+//
+//#define LCD_BASIC_CMD 0
+//#define LCD_ADD_CMD 1
+//
+//#define LCD_N5110_FUNSET (0x20|(LCD_ACT_MODE|LCD_VAL_HOR|LCD_ADD_CMD))
+////////////////////////////////
+//
+//#define LCD_Y 5
+//#define LCD_N5110_Y_POSE 0x40|LCD_Y
+//
+//
+//void lcd_nokia5110_reset_init()
+//{
+//	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_RESET);
+//	HAL_Delay(20);
+//	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_SET);
+//}
+//void lcd_nokia5110_reset()
+//{
+//	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_SET);
+//}
+//void lcd_nokia5110_cmd(uint8_t cmd)
+//{
+//	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
+//	HAL_SPI_Transmit(spi, &cmd, 1, HAL_MAX_DELAY);
+//	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET);
+//}
+//
+//void lcd_nokia5110_data( int size)
+//{
+//	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
+//	HAL_SPI_Transmit(spi, p2, sizeof(p2), 100);
+////	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
+//}
+//
+//void drawPixel(int x, int y)
+//{
+//	p2[x+(y>>3)*LCD_WIDTH] |= 1<<(y&7);
+//}
+//
+//
+//void erasePixel(int x, int y)
+//{
+////	int a=x+(y>>3)*LCD_WIDTH;
+//	p2[x+(y>>3)*LCD_WIDTH] &= ~(1<<(y&7));
+//}
+//
+//void clearLCD()
+//{
+//	memset(p2, 0, LCD_BUFFER_SIZE);
+//
+//    lcd_nokia5110_cmd(0x40);
+//    lcd_nokia5110_cmd(0x80);
+//}
+//
+//
+//void drawSnakeNode(node_Typedef *h)
+//{
+//
+//	switch(h->orientation)
+//	{
+//		case LEFT:
+//			{
+//				for(int i=0; i<4; ++i)
+//				{
+//					drawPixel(h->coords[0]-1, h->coords[1]-2+i);
+//					drawPixel(h->coords[0]+2, h->coords[1]-2+i);
+//				}
+//				for(int i=0; i<2; ++i)
+//				{
+//					drawPixel(h->coords[0]+i, h->coords[1]-2);
+//					drawPixel(h->coords[0]+i, h->coords[1]+1);
+//				}
+//				break;
+//			}
+//		case RIGHT:
+//			{
+//				for(int i=0; i<4; ++i)
+//				{
+//					drawPixel(h->coords[0]-2, h->coords[1]-1+i);
+//					drawPixel(h->coords[0]+1, h->coords[1]-1+i);
+//				}
+//				for(int i=0; i<2; ++i)
+//				{
+//					drawPixel(h->coords[0]-1+i, h->coords[1]-1);
+//					drawPixel(h->coords[0]-1+i, h->coords[1]+2);
+//				}
+//				break;
+//			}
+//		case UP:
+//			{
+//				for(int i=0; i<4; ++i)
+//				{
+//					drawPixel(h->coords[0]-1, h->coords[1]-1+i);
+//					drawPixel(h->coords[0]+2, h->coords[1]-1+i);
+//				}
+//				for(int i=0; i<2; ++i)
+//				{
+//					drawPixel(h->coords[0]+i, h->coords[1]-1);
+//					drawPixel(h->coords[0]+i, h->coords[1]+2);
+//				}
+//			break;
+//			}
+//		case DOWN:
+//			{
+//				for(int i=0; i<4; ++i)
+//				{
+//					drawPixel(h->coords[0]-2, h->coords[1]-2+i);
+//					drawPixel(h->coords[0]+1, h->coords[1]-2+i);
+//				}
+//				for(int i=1; i>=0; --i)
+//				{
+//					drawPixel(h->coords[0]+i, h->coords[1]-2);
+//					drawPixel(h->coords[0]+i, h->coords[1]+1);
+//				}
+//				break;
+//			}
+//		default:
+//			{
+//				break;
+//			}
+//	}
+//
+//}
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -90,44 +290,63 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-  LCD_NOKIA5510_resetInit(&hspi1);
+	LCD_NOKIA5510_resetInit(&hspi1);
 
-//  extern uint8_t LCD_NOKIA5510_dataBuffer[];
-  LCD_NOKIA5510_cmd(0x21);
-  LCD_NOKIA5510_cmd(0x14);
-  LCD_NOKIA5510_cmd(0x80 | 0x2f); //Ustawienie kontrastu
-  LCD_NOKIA5510_cmd(0x20);
-  LCD_NOKIA5510_cmd(0x0c);
-  LCD_NOKIA5510_cmd(0x80);
-  LCD_NOKIA5510_cmd(0x40);
+//  lcd_nokia5110_cmd(0x40);
+//  lcd_nokia5110_cmd(0x80|0x4f);
+	LCD_NOKIA5510_cmd(0x21);
+	LCD_NOKIA5510_cmd(0x14);
+	LCD_NOKIA5510_cmd(0x80 | 0x2f); //Ustawienie kontrastu
+	LCD_NOKIA5510_cmd(0x20);
+	LCD_NOKIA5510_cmd(0x0c);
+
+	LCD_NOKIA5510_cmd(0x40);
+	LCD_NOKIA5510_cmd(0x80);
+//  p2[0]=0xff;
+//  p2[1]=0x18;
+//  p2[2]=0xff;
+
+	LCD_NOKIA5510_dataBuffer[503 - 84] = 0xff;
+	LCD_NOKIA5510_dataBuffer[0] = 0xff;
+	LCD_NOKIA5510_dataBuffer[0] = 0xff;
+	LCD_NOKIA5510_dataBuffer[83] = 0xff;
+	LCD_NOKIA5510_dataBuffer[503] = 0xff;
+//  lcd_nokia5110_data(sizeof(p2));
+	LCD_NOKIA5510_sendDataBuffer();
+	HAL_Delay(20);
+//  p2[503]=0xff;
   /* USER CODE END 2 */
 
-  for(int x = 0; x<LCD_WIDTH;x++)
-  {
-	  for(int y = 0; y<LCD_HEIGHT; y++)
-	  {
-
-		  if(x==0||y==0||x==LCD_WIDTH-1||y==LCD_HEIGHT-1)
-		  {
-	      LCD_NOKIA5510_drawPixel(x, y);
-  	  	  HAL_Delay(5);
-  	  	  LCD_NOKIA5510_sendDataBuffer();
-		  HAL_Delay(5);
-		  }
-	  }
-
-//	  lcd_nokia5110_data(sizeof(p2));
-	  LCD_NOKIA5510_sendDataBuffer();
-  }
-  HAL_Delay(1500);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1) {
+
+	}
+
+//	  for(int x = 0; x<LCD_WIDTH;x++)
+//	  {
+//		  for(int y = 0; y<LCD_HEIGHT; y++)
+//		  {
+//			  drawPixel(x, y);
+//			  lcd_nokia5110_data(sizeof(p2));
+//			  HAL_Delay(5);
+//		  }
+//
+//	  }
+//	  for(int x = 0; x<LCD_WIDTH;x++)
+//	  {
+//		  for(int y = 0; y<LCD_HEIGHT; y++)
+//		  {
+//			  erasePixel(x, y);
+//			  lcd_nokia5110_data(sizeof(p2));
+//			  HAL_Delay(5);
+//		  }
+//
+//	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+
   /* USER CODE END 3 */
 }
 
@@ -189,11 +408,10 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
