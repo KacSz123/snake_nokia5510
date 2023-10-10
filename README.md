@@ -2,18 +2,11 @@
 
 
 
-compilation of snake_ADT.o:
 
-gcc -pedantic -Wall -c snake_ADT.c -o snake_ADT.o
+Snake based on two-way list. Animation in LCD nokia5510 communication with SPI.
 
+4 switches with interruptions.
 
+Timer for moving snake.
 
-compilation of example:
-
-gcc -pedantic -Wall  snake_ADT.o example.c -o ex.out
-
-debugger:
-
-gcc -g snake_ADT.o example.c -o ex_deb.out
-
-gdb ex_deb.out
+Optional: visualization gameover and snake intro.
