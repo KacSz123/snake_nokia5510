@@ -28,7 +28,7 @@
 #include "string.h"
 #include "stdbool.h"
 #include <stdlib.h>
-
+#include "snake.h"
 #include "lcd_nokia5510.h"
 /* USER CODE END Includes */
 
@@ -275,7 +275,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+node_Typedef snake;
+snakeHeadInit(1, 1, &snake);
   /* USER CODE END Init */
 
   /* Configure the system clock */
