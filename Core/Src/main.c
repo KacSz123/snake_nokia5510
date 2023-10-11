@@ -30,12 +30,21 @@
 #include <stdlib.h>
 #include "snake.h"
 #include "lcd_nokia5510.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 //SPI_HandleTypeDef *spi = &hspi1;
 //
+typedef enum KEYPAD
+{
+	KEY_BUTTON_UP,
+	KEY_BUTTON_DOWN,
+	KEY_BUTTON_LEFT,
+	KEY_BUTTON_RIGHT
+}KEYPAD;
+static volatile KEYPAD key = KEY_BUTTON_UP;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -45,6 +54,7 @@ int _write(int file, char* pData, int len)
 	HAL_UART_Transmit(&huart2, (uint8_t*)pData, len, HAL_MAX_DELAY);
 	return len;
 }
+
 //// function settings
 ////typedef snake
 //#define LCD_WIDTH 84
@@ -255,34 +265,42 @@ int _write(int file, char* pData, int len)
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+{
 
+	if(GPIO_Pin == BUTTON_LEFT_Pin && key!=KEY_BUTTON_LEFT)
+	{
+		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+		key = KEY_BUTTON_LEFT;
+//		printf("L\n\r");
+	}
+	else if(GPIO_Pin == BUTTON_RIGHT_Pin && key!=KEY_BUTTON_RIGHT)
+	{
+		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+		key = KEY_BUTTON_RIGHT;
+//		printf("R\n\r");
+	}
+	else if(GPIO_Pin == BUTTON_DOWN_Pin && key!=KEY_BUTTON_DOWN)
+	{
+		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+		key = KEY_BUTTON_DOWN;
+//		printf("D\n\r");
+	}
+	else if(GPIO_Pin == BUTTON_UP_Pin && key!=KEY_BUTTON_UP)
+	{
+		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+		key = KEY_BUTTON_UP;
+//		printf("U\n\r");
+	}
+//	HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
- void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
- {
-	 switch(GPIO_Pin)
-	 {
-	 case BUTTON_LEFT_Pin:
-	 {
-		 break;
-	 }
-	 case BUTTON_RIGHT_Pin:
-	 {
-		 break;
-	 }
-	 case BUTTON_UP_Pin:
-	 {
-		 break;
-	 }
-	 case BUTTON_DOWN_Pin:
-	 {
-		 break;
-	 }
-	 }
- }
+
 /* USER CODE END 0 */
 
 /**
@@ -316,6 +334,9 @@ snakeHeadInit(1, 1, &snake);
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_SPI1_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 	LCD_NOKIA5510_resetInit(&hspi1);
 
@@ -346,6 +367,7 @@ snakeHeadInit(1, 1, &snake);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	KEYPAD tmp =key;
 	while (1) {
 		  for(int x = 0; x<LCD_WIDTH;x++)
 		  {
@@ -364,8 +386,15 @@ snakeHeadInit(1, 1, &snake);
 		//	  lcd_nokia5110_data(sizeof(p2));
 			  LCD_NOKIA5510_sendDataBuffer();
 		  }
-		  HAL_Delay(1500);
+//		  HAL_Delay(1500);
 		  LCD_NOKIA5510_clearScreen();
+		  HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+		  printf("hw\n\r");
+		  if(key!=tmp)
+		  {
+			  printf("ZMIANA!]n]r");
+			  tmp = key;
+		  }
 	}
 
 //	  for(int x = 0; x<LCD_WIDTH;x++)
@@ -440,6 +469,17 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* EXTI4_15_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
