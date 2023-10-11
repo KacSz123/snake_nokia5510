@@ -40,6 +40,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+int _write(int file, char* pData, int len)
+{
+	HAL_UART_Transmit(&huart2, (uint8_t*)pData, len, HAL_MAX_DELAY);
+	return len;
+}
 //// function settings
 ////typedef snake
 //#define LCD_WIDTH 84
@@ -256,7 +261,28 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+ {
+	 switch(GPIO_Pin)
+	 {
+	 case BUTTON_LEFT_Pin:
+	 {
+		 break;
+	 }
+	 case BUTTON_RIGHT_Pin:
+	 {
+		 break;
+	 }
+	 case BUTTON_UP_Pin:
+	 {
+		 break;
+	 }
+	 case BUTTON_DOWN_Pin:
+	 {
+		 break;
+	 }
+	 }
+ }
 /* USER CODE END 0 */
 
 /**
