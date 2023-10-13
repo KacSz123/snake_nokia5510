@@ -368,7 +368,12 @@ snakeHeadInit(1, 1, &snake);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	KEYPAD tmp =key;
+//	HAL_Delay(2000);
 	while (1) {
+
+		LCD_NOKIA5510_drawLine2Points(20, 10, 70, 40);
+		LCD_NOKIA5510_drawRectangle(20, 10, 70, 10, 70, 40, 20, 40);
+	  LCD_NOKIA5510_sendDataBuffer();
 		  for(int x = 0; x<LCD_WIDTH;x++)
 		  {
 			  for(int y = 0; y<LCD_HEIGHT; y++)
@@ -385,11 +390,11 @@ snakeHeadInit(1, 1, &snake);
 
 		//	  lcd_nokia5110_data(sizeof(p2));
 			  LCD_NOKIA5510_sendDataBuffer();
-		  }
-//		  HAL_Delay(1500);
+		  };
 		  LCD_NOKIA5510_clearScreen();
 		  HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		  printf("hw\n\r");
+
+		  HAL_Delay(150);
 		  if(key!=tmp)
 		  {
 			  printf("ZMIANA!]n]r");

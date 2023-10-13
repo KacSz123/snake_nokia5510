@@ -38,7 +38,7 @@ void LCD_NOKIA5510_cmd(uint8_t cmd)
 {
 	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(&hspi1, &cmd, 1, HAL_MAX_DELAY);
+	HAL_SPI_Transmit(spi, &cmd, 1, HAL_MAX_DELAY);
 	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET);
 }
@@ -46,7 +46,7 @@ void LCD_NOKIA5510_sendData(uint8_t *data, int size)
 {
 	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(&hspi1, data, size, HAL_MAX_DELAY);
+	HAL_SPI_Transmit(spi, data, size, HAL_MAX_DELAY);
 //	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
 }
@@ -55,7 +55,7 @@ void LCD_NOKIA5510_sendDataBuffer()
 {
 	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(&hspi1,LCD_NOKIA5510_dataBuffer , LCD_BUFFER_SIZE, 100);
+	HAL_SPI_Transmit(spi,LCD_NOKIA5510_dataBuffer , LCD_BUFFER_SIZE, 100);
 //	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
 }
@@ -83,7 +83,98 @@ void LCD_NOKIA5510_clearScreen()
 
 void LCD_NOKIA5510_drawLine2Points(uint8_t x1, uint8_t y1,uint8_t x2, uint8_t y2)
 {
+	   int d, dx, dy, ai, bi, xi, yi;
+	     int x = x1, y = y1;
+	     // direction of drawing x
+	     if (x1 < x2)
+	     {
+	         xi = 1;
+	         dx = x2 - x1;
+	     }
+	     else
+	     {
+	         xi = -1;
+	         dx = x1 - x2;
+	     }
+	     // direction of drawing y
+	     if (y1 < y2)
+	     {
+	         yi = 1;
+	         dy = y2 - y1;
+	     }
+	     else
+	     {
+	         yi = -1;
+	         dy = y1 - y2;
+	     }
+	     // 1st pixel
+	     LCD_NOKIA5510_drawPixel(x, y);
+	     // axis OX
+	     if (dx > dy)
+	     {
+	         ai = (dy - dx) * 2;
+	         bi = dy * 2;
+	         d = bi - dx;
+	         // loop xi
+	         while (x != x2)
+	         {
+	             // oaram test
+	             if (d >= 0)
+	             {
+	                 x += xi;
+	                 y += yi;
+	                 d += ai;
+	             }
+	             else
+	             {
+	                 d += bi;
+	                 x += xi;
+	             }
+	    	     LCD_NOKIA5510_drawPixel(x, y);
+	         }
+	     }
+	     // axis OY
+	     else
+	     {
+	         ai = ( dx - dy ) * 2;
+	         bi = dx * 2;
+	         d = bi - dy;
+	         // loop yi
+	         while (y != y2)
+	         {
+	             // param test
+	             if (d >= 0)
+	             {
+	                 x += xi;
+	                 y += yi;
+	                 d += ai;
+	             }
+	             else
+	             {
+	                 d += bi;
+	                 y += yi;
+	             }
+	    	     LCD_NOKIA5510_drawPixel(x, y);
+	         }
+	     }
+}
+void LCD_NOKIA5510_drawRectangle(int x1, int y1, int x2, int y2,
+								int x3, int y3, int x4, int y4)
+{
+	LCD_NOKIA5510_drawLine2Points(x1, y1, x2, y2);
+	LCD_NOKIA5510_drawLine2Points(x2, y2, x3, y3);
+	LCD_NOKIA5510_drawLine2Points(x3, y3, x4, y4);
+	LCD_NOKIA5510_drawLine2Points(x4, y4, x1, y1);
 
 }
-void LCD_NOKIA5510_drawRectangle();
+void LCD_NOKIA5510_drawLine2PointsStruct(LCD_POINT_TYPEDEF p1, LCD_POINT_TYPEDEF p2)
+{
+	LCD_NOKIA5510_drawLine2Points(p1.x, p1.y, p2.x,p2.y);
+	}
+void LCD_NOKIA5510_drawRectangleStruct(LCD_POINT_TYPEDEF p1, LCD_POINT_TYPEDEF p2,
+									LCD_POINT_TYPEDEF p3, LCD_POINT_TYPEDEF p4)
+{
+	LCD_NOKIA5510_drawRectangle(p1.x, p1.y,p2.x, p2.y,p3.x, p3.y,p4.x, p4.y);
+}
+
 void LCD_NOKIA5510_drawCircle();
