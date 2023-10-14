@@ -45,9 +45,10 @@ void removeSnake(node_Typedef *h);
 
 void moveSnake(node_Typedef *h, bool ifEaten, int orient);
 
-void changeOrientation(SnakeOrientation_Typedef orient);
+void changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient);
 
+void drawSnakeNode(const node_Typedef *snake);
 
-
+void drawSnake(const node_Typedef *snakeHead);
 
 #endif /* INC_SNAKE_H_ */

@@ -13,6 +13,8 @@
 
 
 SPI_HandleTypeDef *spi;
+
+static uint8_t LCD_NOKIA5510_dataBuffer[LCD_BUFFER_SIZE];
 //spi = &
 
 void LCD_NOKIA5510_resetInit(SPI_HandleTypeDef* sp)

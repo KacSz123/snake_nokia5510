@@ -16,8 +16,9 @@
 
 #define LCD_BUFFER_SIZE			(LCD_WIDTH * LCD_HEIGHT/PIXEL_SIZE)
 
-
-static uint8_t LCD_NOKIA5510_dataBuffer[LCD_BUFFER_SIZE];
+#ifndef LCD_BUFFER
+#define LCD_BUFFER
+#endif
 
 #define LCD_ACT_MODE 0<<2
 #define LCD_POW_D_MODE 1<<2

@@ -182,74 +182,7 @@ int _write(int file, char* pData, int len)
 //}
 //
 //
-//void drawSnakeNode(node_Typedef *h)
-//{
-//
-//	switch(h->orientation)
-//	{
-//		case LEFT:
-//			{
-//				for(int i=0; i<4; ++i)
-//				{
-//					drawPixel(h->coords[0]-1, h->coords[1]-2+i);
-//					drawPixel(h->coords[0]+2, h->coords[1]-2+i);
-//				}
-//				for(int i=0; i<2; ++i)
-//				{
-//					drawPixel(h->coords[0]+i, h->coords[1]-2);
-//					drawPixel(h->coords[0]+i, h->coords[1]+1);
-//				}
-//				break;
-//			}
-//		case RIGHT:
-//			{
-//				for(int i=0; i<4; ++i)
-//				{
-//					drawPixel(h->coords[0]-2, h->coords[1]-1+i);
-//					drawPixel(h->coords[0]+1, h->coords[1]-1+i);
-//				}
-//				for(int i=0; i<2; ++i)
-//				{
-//					drawPixel(h->coords[0]-1+i, h->coords[1]-1);
-//					drawPixel(h->coords[0]-1+i, h->coords[1]+2);
-//				}
-//				break;
-//			}
-//		case UP:
-//			{
-//				for(int i=0; i<4; ++i)
-//				{
-//					drawPixel(h->coords[0]-1, h->coords[1]-1+i);
-//					drawPixel(h->coords[0]+2, h->coords[1]-1+i);
-//				}
-//				for(int i=0; i<2; ++i)
-//				{
-//					drawPixel(h->coords[0]+i, h->coords[1]-1);
-//					drawPixel(h->coords[0]+i, h->coords[1]+2);
-//				}
-//			break;
-//			}
-//		case DOWN:
-//			{
-//				for(int i=0; i<4; ++i)
-//				{
-//					drawPixel(h->coords[0]-2, h->coords[1]-2+i);
-//					drawPixel(h->coords[0]+1, h->coords[1]-2+i);
-//				}
-//				for(int i=1; i>=0; --i)
-//				{
-//					drawPixel(h->coords[0]+i, h->coords[1]-2);
-//					drawPixel(h->coords[0]+i, h->coords[1]+1);
-//				}
-//				break;
-//			}
-//		default:
-//			{
-//				break;
-//			}
-//	}
-//
-//}
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -354,11 +287,11 @@ snakeHeadInit(1, 1, &snake);
 //  p2[1]=0x18;
 //  p2[2]=0xff;
 
-	LCD_NOKIA5510_dataBuffer[503 - 84] = 0xff;
-	LCD_NOKIA5510_dataBuffer[0] = 0xff;
-	LCD_NOKIA5510_dataBuffer[0] = 0xff;
-	LCD_NOKIA5510_dataBuffer[83] = 0xff;
-	LCD_NOKIA5510_dataBuffer[503] = 0xff;
+//	LCD_NOKIA5510_dataBuffer[503 - 84] = 0xff;
+//	LCD_NOKIA5510_dataBuffer[0] = 0xff;
+//	LCD_NOKIA5510_dataBuffer[0] = 0xff;
+//	LCD_NOKIA5510_dataBuffer[83] = 0xff;
+//	LCD_NOKIA5510_dataBuffer[503] = 0xff;
 //  lcd_nokia5110_data(sizeof(p2));
 	LCD_NOKIA5510_sendDataBuffer();
 	HAL_Delay(20);

@@ -9,6 +9,7 @@
 #include "snake.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "lcd_nokia5510.h"
 void addSnakeNode(node_Typedef *h, int x, int y)
 {
 	node_Typedef *node_tmp = h;
@@ -91,3 +92,54 @@ void moveSnake(node_Typedef *h, bool ifEaten, int orient)
 	}
 }
 
+void changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient)
+{
+	switch(orient)
+	{
+	case UP:
+	{
+		snake->orientation = UP;
+		break;
+	}
+	case DOWN:
+	{
+		snake->orientation = DOWN;
+		break;
+	}
+	case LEFT:
+	{
+		snake->orientation = LEFT;
+		break;
+	}
+	case RIGHT:
+	{
+		snake->orientation = RIGHT;
+		break;
+	}
+	}
+}
+
+
+void drawSnakeNode( node_Typedef const *snakeNode)
+{
+	for(int i=0; i<4; ++i)
+	{
+		LCD_NOKIA5510_drawPixel(snakeNode->coords[0]-1, snakeNode->coords[1]-1+i);
+		LCD_NOKIA5510_drawPixel(snakeNode->coords[0]+2, snakeNode->coords[1]-1+i);
+	}
+	for(int i=0; i<2; ++i)
+	{
+		LCD_NOKIA5510_drawPixel(snakeNode->coords[0]+i, snakeNode->coords[1]-1);
+		LCD_NOKIA5510_drawPixel(snakeNode->coords[0]+i, snakeNode->coords[1]+2);
+	}
+}
+
+void drawSnake(node_Typedef const *snakeHead)
+{
+	const node_Typedef *tmp = snakeHead;
+	while(tmp!=NULL)
+	{
+		drawSnakeNode(tmp);
+		tmp = tmp->next;
+	}
+}
