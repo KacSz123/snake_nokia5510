@@ -10,7 +10,7 @@
 #include "gpio.h"
 #include "stdlib.h"
 #include "memory.h"
-
+#include "math.h"
 
 SPI_HandleTypeDef *spi;
 
@@ -28,6 +28,19 @@ void LCD_NOKIA5510_resetInit(SPI_HandleTypeDef* sp)
 	memset(LCD_NOKIA5510_dataBuffer, 0, LCD_BUFFER_SIZE);
 }
 
+void LCD_NOKIA5510_initDefault(SPI_HandleTypeDef *sp)
+{
+
+	LCD_NOKIA5510_resetInit(sp);
+	LCD_NOKIA5510_cmd(0x21);
+	LCD_NOKIA5510_cmd(0x14);
+	LCD_NOKIA5510_cmd(0x80 | 0x2f); //Ustawienie kontrastu
+	LCD_NOKIA5510_cmd(0x20);
+	LCD_NOKIA5510_cmd(0x0c);
+
+	LCD_NOKIA5510_cmd(0x40);
+	LCD_NOKIA5510_cmd(0x80);
+}
 
 
 void LCD_NOKIA5510_reset()
@@ -179,4 +192,31 @@ void LCD_NOKIA5510_drawRectangleStruct(LCD_POINT_TYPEDEF p1, LCD_POINT_TYPEDEF p
 	LCD_NOKIA5510_drawRectangle(p1.x, p1.y,p2.x, p2.y,p3.x, p3.y,p4.x, p4.y);
 }
 
-void LCD_NOKIA5510_drawCircle();
+void LCD_NOKIA5510_drawCircle(int mx, int my, int rad)
+{
+	int x=0,y,p;
+	y=rad;
+	LCD_NOKIA5510_drawPixel(mx-x, my-y);
+
+	p =(int)(3-(2*rad));
+	for(x = 0; x<=y; ++x)
+	{
+		if(p<0)
+		{
+			p=(int)(p+(4*x)+(2*3));
+		}
+		else{
+			y-=1;
+			p+=((4*(x-y)+10));
+			}
+
+		LCD_NOKIA5510_drawPixel(mx+x,my-y);
+		LCD_NOKIA5510_drawPixel(mx-x,my-y);
+		LCD_NOKIA5510_drawPixel(mx+x,my+y);
+		LCD_NOKIA5510_drawPixel(mx-x,my+y);
+		LCD_NOKIA5510_drawPixel(mx+y,my-x);
+		LCD_NOKIA5510_drawPixel(mx-y,my-x);
+		LCD_NOKIA5510_drawPixel(mx+y,my+x);
+		LCD_NOKIA5510_drawPixel(mx-y,my+x);
+	}
+}

@@ -49,6 +49,6 @@ void changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient);
 
 void drawSnakeNode(const node_Typedef *snake);
 
-void drawSnake(const node_Typedef *snakeHead);
+void drawSnake(node_Typedef *const snakeHead);
 
 #endif /* INC_SNAKE_H_ */

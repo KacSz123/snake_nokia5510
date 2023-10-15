@@ -113,75 +113,6 @@ int _write(int file, char* pData, int len)
 //
 //	}
 //}
-//
-//
-//
-//#define LCD_ACT_MODE 0<<2
-//#define LCD_POW_D_MODE 1<<2
-//
-//#define LCD_VAL_HOR 0<<1
-//#define LCD_VAL_VER 1<<1
-//
-//#define LCD_BASIC_CMD 0
-//#define LCD_ADD_CMD 1
-//
-//#define LCD_N5110_FUNSET (0x20|(LCD_ACT_MODE|LCD_VAL_HOR|LCD_ADD_CMD))
-////////////////////////////////
-//
-//#define LCD_Y 5
-//#define LCD_N5110_Y_POSE 0x40|LCD_Y
-//
-//
-//void lcd_nokia5110_reset_init()
-//{
-//	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_RESET);
-//	HAL_Delay(20);
-//	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_SET);
-//}
-//void lcd_nokia5110_reset()
-//{
-//	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_RESET);
-//	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_SET);
-//}
-//void lcd_nokia5110_cmd(uint8_t cmd)
-//{
-//	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_RESET);
-//	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-//	HAL_SPI_Transmit(spi, &cmd, 1, HAL_MAX_DELAY);
-//	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET);
-//}
-//
-//void lcd_nokia5110_data( int size)
-//{
-//	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-//	HAL_SPI_Transmit(spi, p2, sizeof(p2), 100);
-////	HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-//}
-//
-//void drawPixel(int x, int y)
-//{
-//	p2[x+(y>>3)*LCD_WIDTH] |= 1<<(y&7);
-//}
-//
-//
-//void erasePixel(int x, int y)
-//{
-////	int a=x+(y>>3)*LCD_WIDTH;
-//	p2[x+(y>>3)*LCD_WIDTH] &= ~(1<<(y&7));
-//}
-//
-//void clearLCD()
-//{
-//	memset(p2, 0, LCD_BUFFER_SIZE);
-//
-//    lcd_nokia5110_cmd(0x40);
-//    lcd_nokia5110_cmd(0x80);
-//}
-//
-//
 
 /* USER CODE END PD */
 
@@ -283,16 +214,7 @@ snakeHeadInit(1, 1, &snake);
 
 	LCD_NOKIA5510_cmd(0x40);
 	LCD_NOKIA5510_cmd(0x80);
-//  p2[0]=0xff;
-//  p2[1]=0x18;
-//  p2[2]=0xff;
 
-//	LCD_NOKIA5510_dataBuffer[503 - 84] = 0xff;
-//	LCD_NOKIA5510_dataBuffer[0] = 0xff;
-//	LCD_NOKIA5510_dataBuffer[0] = 0xff;
-//	LCD_NOKIA5510_dataBuffer[83] = 0xff;
-//	LCD_NOKIA5510_dataBuffer[503] = 0xff;
-//  lcd_nokia5110_data(sizeof(p2));
 	LCD_NOKIA5510_sendDataBuffer();
 	HAL_Delay(20);
 //  p2[503]=0xff;
@@ -306,6 +228,7 @@ snakeHeadInit(1, 1, &snake);
 
 		LCD_NOKIA5510_drawLine2Points(20, 10, 70, 40);
 		LCD_NOKIA5510_drawRectangle(20, 10, 70, 10, 70, 40, 20, 40);
+		LCD_NOKIA5510_drawCircle(55, 25, 20);
 	  LCD_NOKIA5510_sendDataBuffer();
 		  for(int x = 0; x<LCD_WIDTH;x++)
 		  {

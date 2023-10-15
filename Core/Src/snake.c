@@ -120,7 +120,7 @@ void changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient)
 }
 
 
-void drawSnakeNode( node_Typedef const *snakeNode)
+void drawSnakeNode(node_Typedef const  *snakeNode)
 {
 	for(int i=0; i<4; ++i)
 	{
@@ -134,7 +134,7 @@ void drawSnakeNode( node_Typedef const *snakeNode)
 	}
 }
 
-void drawSnake(node_Typedef const *snakeHead)
+void drawSnake(node_Typedef *const snakeHead)
 {
 	const node_Typedef *tmp = snakeHead;
 	while(tmp!=NULL)

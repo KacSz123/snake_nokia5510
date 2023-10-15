@@ -55,6 +55,7 @@ typedef struct point
  */
 void LCD_NOKIA5510_resetInit(SPI_HandleTypeDef *sp);
 
+void LCD_NOKIA5510_initDefault(SPI_HandleTypeDef *sp);
 
 /**
  * @brief Reset of lcd..
@@ -89,6 +90,7 @@ void LCD_NOKIA5510_drawLine2PointsStruct(LCD_POINT_TYPEDEF p1, LCD_POINT_TYPEDEF
 void LCD_NOKIA5510_drawRectangle(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4);
 void LCD_NOKIA5510_drawRectangleStruct(LCD_POINT_TYPEDEF p1, LCD_POINT_TYPEDEF p2,
 									LCD_POINT_TYPEDEF p3, LCD_POINT_TYPEDEF p4);
-void LCD_NOKIA5510_drawCircle();
+
+void LCD_NOKIA5510_drawCircle(int mx, int my, int rad);
 
 #endif /* INC_LCD_NOKIA5510_H_ */
