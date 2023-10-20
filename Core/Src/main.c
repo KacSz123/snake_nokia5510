@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -160,6 +161,12 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 	}
 //	HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
 }
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim == &htim2) {
+		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+  }
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -198,64 +205,77 @@ snakeHeadInit(1, 1, &snake);
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_SPI1_Init();
+  MX_TIM2_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
-	LCD_NOKIA5510_resetInit(&hspi1);
-
-//  lcd_nokia5110_cmd(0x40);
-//  lcd_nokia5110_cmd(0x80|0x4f);
-	LCD_NOKIA5510_cmd(0x21);
-	LCD_NOKIA5510_cmd(0x14);
-	LCD_NOKIA5510_cmd(0x80 | 0x2f); //Ustawienie kontrastu
-	LCD_NOKIA5510_cmd(0x20);
-	LCD_NOKIA5510_cmd(0x0c);
-
-	LCD_NOKIA5510_cmd(0x40);
-	LCD_NOKIA5510_cmd(0x80);
-
+HAL_TIM_Base_Start_IT(&htim2);
+LCD_NOKIA5510_initDefault(&hspi1);
 	LCD_NOKIA5510_sendDataBuffer();
 	HAL_Delay(20);
-//  p2[503]=0xff;
+
+	KEYPAD tmp =key;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	KEYPAD tmp =key;
-//	HAL_Delay(2000);
 	while (1) {
-
-		LCD_NOKIA5510_drawLine2Points(20, 10, 70, 40);
-		LCD_NOKIA5510_drawRectangle(20, 10, 70, 10, 70, 40, 20, 40);
-		LCD_NOKIA5510_drawCircle(55, 25, 20);
-	  LCD_NOKIA5510_sendDataBuffer();
-		  for(int x = 0; x<LCD_WIDTH;x++)
-		  {
-			  for(int y = 0; y<LCD_HEIGHT; y++)
-			  {
-
-				  if(x==0||y==0||x==LCD_WIDTH-1||y==LCD_HEIGHT-1)
-				  {
-			      LCD_NOKIA5510_drawPixel(x, y);
-		  	  	  HAL_Delay(5);
-		  	  	  LCD_NOKIA5510_sendDataBuffer();
-				  HAL_Delay(5);
-				  }
-			  }
-
-		//	  lcd_nokia5110_data(sizeof(p2));
-			  LCD_NOKIA5510_sendDataBuffer();
-		  };
-		  LCD_NOKIA5510_clearScreen();
-		  HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-
-		  HAL_Delay(150);
-		  if(key!=tmp)
-		  {
-			  printf("ZMIANA!]n]r");
-			  tmp = key;
-		  }
+//
+//		LCD_NOKIA5510_drawLine2Points(20, 10, 70, 40);
+//		LCD_NOKIA5510_drawRectangle(20, 10, 70, 10, 70, 40, 20, 40);
+//		LCD_NOKIA5510_drawCircle(55, 25, 20);
+//	  LCD_NOKIA5510_sendDataBuffer();
+//		  for(int x = 0; x<LCD_WIDTH;x++)
+//		  {
+//			  for(int y = 0; y<LCD_HEIGHT; y++)
+//			  {
+//
+//				  if(x==0||y==0||x==LCD_WIDTH-1||y==LCD_HEIGHT-1)
+//				  {
+//			      LCD_NOKIA5510_drawPixel(x, y);
+//		  	  	  HAL_Delay(5);
+//		  	  	  LCD_NOKIA5510_sendDataBuffer();
+//				  HAL_Delay(5);
+//				  }
+//			  }
+//
+//		//	  lcd_nokia5110_data(sizeof(p2));
+//			  LCD_NOKIA5510_sendDataBuffer();
+//		  };
+//		  LCD_NOKIA5510_clearScreen();
+//
+//		  if(key!=tmp)
+//		  {
+//			  printf("ZMIANA!\r\n");
+//			  switch(key)
+//			  {
+//			  case KEY_BUTTON_UP:
+//			  {
+//				  printf("UP!\r\n");
+//				break;
+//
+//			  }
+//			  case KEY_BUTTON_DOWN:
+//			  {
+//				  printf("D!\r\n");
+//				break;
+//			  }
+//			  case KEY_BUTTON_LEFT:
+//			  {
+//				  printf("L!\r\n");
+//				break;
+//			  }
+//			  case KEY_BUTTON_RIGHT:
+//			  {
+//				  printf("R!\r\n");
+//				break;
+//			  }
+//			  }
+//			  tmp = key;
+//		  }
+//		  printf("Zsd\n\r");
 	}
 
 //	  for(int x = 0; x<LCD_WIDTH;x++)
@@ -305,7 +325,13 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSIDiv = RCC_HSI_DIV1;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
+  RCC_OscInitStruct.PLL.PLLN = 8;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -314,11 +340,11 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
