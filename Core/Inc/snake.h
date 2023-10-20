@@ -37,18 +37,20 @@ typedef struct fruit
 } fruit_Typedef;
 
 
-void addSnakeNode(node_Typedef *h, int x, int y);
+void SNAKE_GAME_addSnakeNode(node_Typedef *h, int x, int y);
 
-void snakeHeadInit(int x, int y, node_Typedef *h);
+void SNAKE_GAME_snakeHeadInit(int x, int y, node_Typedef *h);
 
-void removeSnake(node_Typedef *h);
+void SNAKE_GAME_removeSnake(node_Typedef *h);
 
-void moveSnake(node_Typedef *h, bool ifEaten, int orient);
+void SNAKE_GAME_moveSnake(node_Typedef *h, bool ifEaten, int orient);
 
-void changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient);
+void SNAKE_GAME_moveSnakeNode(node_Typedef *h);
+void SNAKE_GAME_changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient);
 
-void drawSnakeNode(const node_Typedef *snake);
+void SNAKE_GAME_drawSnakeNode(const node_Typedef *snake);
 
-void drawSnake(node_Typedef *const snakeHead);
+void SNAKE_GAME_drawSnake(node_Typedef *const snakeHead);
 
+void SNAKE_GAME_drawFruit(fruit_Typedef *const fruit);
 #endif /* INC_SNAKE_H_ */

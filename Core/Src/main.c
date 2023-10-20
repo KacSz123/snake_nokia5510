@@ -45,7 +45,8 @@ typedef enum KEYPAD
 	KEY_BUTTON_LEFT,
 	KEY_BUTTON_RIGHT
 }KEYPAD;
-static volatile KEYPAD key = KEY_BUTTON_UP;
+static volatile SnakeOrientation_Typedef key = RIGHT;
+static volatile bool moveS = false;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -135,28 +136,24 @@ static void MX_NVIC_Init(void);
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {
 
-	if(GPIO_Pin == BUTTON_LEFT_Pin && key!=KEY_BUTTON_LEFT)
+	if(GPIO_Pin == BUTTON_LEFT_Pin && key!=LEFT)
 	{
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		key = KEY_BUTTON_LEFT;
+		key = LEFT;
 //		printf("L\n\r");
 	}
-	else if(GPIO_Pin == BUTTON_RIGHT_Pin && key!=KEY_BUTTON_RIGHT)
+	else if(GPIO_Pin == BUTTON_RIGHT_Pin && key!=RIGHT)
 	{
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		key = KEY_BUTTON_RIGHT;
+		key = RIGHT;
 //		printf("R\n\r");
 	}
-	else if(GPIO_Pin == BUTTON_DOWN_Pin && key!=KEY_BUTTON_DOWN)
+	else if(GPIO_Pin == BUTTON_DOWN_Pin && key!=DOWN)
 	{
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		key = KEY_BUTTON_DOWN;
+		key = DOWN;
 //		printf("D\n\r");
 	}
-	else if(GPIO_Pin == BUTTON_UP_Pin && key!=KEY_BUTTON_UP)
+	else if(GPIO_Pin == BUTTON_UP_Pin && key!=UP)
 	{
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		key = KEY_BUTTON_UP;
+		key =UP;
 //		printf("U\n\r");
 	}
 //	HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
@@ -166,6 +163,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim == &htim2) {
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
   }
+  moveS = true;
 }
 /* USER CODE END PFP */
 
@@ -191,7 +189,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 node_Typedef snake;
-snakeHeadInit(1, 1, &snake);
+SNAKE_GAME_snakeHeadInit(40, 25, &snake);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -215,15 +213,18 @@ LCD_NOKIA5510_initDefault(&hspi1);
 	LCD_NOKIA5510_sendDataBuffer();
 	HAL_Delay(20);
 
-	KEYPAD tmp =key;
+	 SnakeOrientation_Typedef tmp =key;
 
+	LCD_NOKIA5510_drawLine2Points(20, 10, 70, 40);
+	SNAKE_GAME_drawSnake(&snake);
+	LCD_NOKIA5510_sendDataBuffer();
+	SNAKE_GAME_changeOrientation(&snake, RIGHT);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
 //
-//		LCD_NOKIA5510_drawLine2Points(20, 10, 70, 40);
 //		LCD_NOKIA5510_drawRectangle(20, 10, 70, 10, 70, 40, 20, 40);
 //		LCD_NOKIA5510_drawCircle(55, 25, 20);
 //	  LCD_NOKIA5510_sendDataBuffer();
@@ -242,10 +243,22 @@ LCD_NOKIA5510_initDefault(&hspi1);
 //			  }
 //
 //		//	  lcd_nokia5110_data(sizeof(p2));
-//			  LCD_NOKIA5510_sendDataBuffer();
 //		  };
 //		  LCD_NOKIA5510_clearScreen();
 //
+		if(moveS)
+		{
+			if(key!=tmp)
+			{
+				SNAKE_GAME_changeOrientation(&snake, key);
+				tmp = key;
+			}
+			SNAKE_GAME_moveSnakeNode(&snake);
+			LCD_NOKIA5510_clearScreen();
+			SNAKE_GAME_drawSnake(&snake);
+			LCD_NOKIA5510_sendDataBuffer();
+			moveS = false;
+		}
 //		  if(key!=tmp)
 //		  {
 //			  printf("ZMIANA!\r\n");

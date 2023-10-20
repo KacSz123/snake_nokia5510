@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lcd_nokia5510.h"
-void addSnakeNode(node_Typedef *h, int x, int y)
+void SNAKE_GAME_addSnakeNode(node_Typedef *h, int x, int y)
 {
 	node_Typedef *node_tmp = h;
 
@@ -28,7 +28,7 @@ void addSnakeNode(node_Typedef *h, int x, int y)
 	node_tmp->next->prev = node_tmp;
 	node_tmp->next->next = NULL;
 }
-void snakeHeadInit(int x, int y, node_Typedef *h)
+void SNAKE_GAME_snakeHeadInit(int x, int y, node_Typedef *h)
 {
 
 	h->coords[0] = x;
@@ -39,11 +39,35 @@ void snakeHeadInit(int x, int y, node_Typedef *h)
 	h->prev = NULL;
 }
 
-void removeSnake(node_Typedef *h)
+void SNAKE_GAME_removeSnake(node_Typedef *h)
 {
-}
 
-void moveSnake(node_Typedef *h, bool ifEaten, int orient)
+}
+void SNAKE_GAME_moveSnakeNode(node_Typedef *h)
+{
+	switch (h->orientation) {
+	case UP:{
+		--(h->coords[1]);
+		break;
+	}
+	case DOWN:{
+		++(h->coords[1]);
+		break;
+	}
+	case LEFT:{
+		--(h->coords[0]);
+		break;
+	}
+	case RIGHT:{
+		++(h->coords[0]);
+		break;
+	}
+		default:
+			break;
+	}
+
+}
+void SNAKE_GAME_moveSnake(node_Typedef *h, bool ifEaten, int orient)
 {
 	node_Typedef *node_tmp = h;
 	int tmp[2];
@@ -68,7 +92,7 @@ void moveSnake(node_Typedef *h, bool ifEaten, int orient)
 	
 	if (ifEaten)
 	{
-		addSnakeNode(h, tmp[0], tmp[1]);
+		SNAKE_GAME_addSnakeNode(h, tmp[0], tmp[1]);
 
 	}
 	h->coords[0]+=1;
@@ -92,7 +116,7 @@ void moveSnake(node_Typedef *h, bool ifEaten, int orient)
 	}
 }
 
-void changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient)
+void SNAKE_GAME_changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient)
 {
 	switch(orient)
 	{
@@ -120,7 +144,7 @@ void changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient)
 }
 
 
-void drawSnakeNode(node_Typedef const  *snakeNode)
+void SNAKE_GAME_drawSnakeNode(node_Typedef const  *snakeNode)
 {
 	for(int i=0; i<4; ++i)
 	{
@@ -134,12 +158,17 @@ void drawSnakeNode(node_Typedef const  *snakeNode)
 	}
 }
 
-void drawSnake(node_Typedef *const snakeHead)
+void SNAKE_GAME_drawSnake(node_Typedef *const snakeHead)
 {
 	const node_Typedef *tmp = snakeHead;
 	while(tmp!=NULL)
 	{
-		drawSnakeNode(tmp);
+		SNAKE_GAME_drawSnakeNode(tmp);
 		tmp = tmp->next;
 	}
+}
+
+void SNAKE_GAME_drawFruit(fruit_Typedef *const fruit)
+{
+
 }
