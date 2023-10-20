@@ -1,6 +1,6 @@
 Configuration	snake_nokia5510
 STM32CubeMX 	6.2.0
-Date	10/14/2023
+Date	10/20/2023
 MCU	STM32G071RBTx
 
 
@@ -17,6 +17,7 @@ SYS	Serial Wire	SYS_SWDIO	PA13
 SYS	SYS_WakeUp1	SYS_WKUP2	PC13
 SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
 SYS	Dead Battery Signals disabled	SYS_VS_DBSignals	VP_SYS_VS_DBSignals
+TIM2	Internal Clock	TIM2_VS_ClockSourceINT	VP_TIM2_VS_ClockSourceINT
 USART2	Asynchronous	USART2_RX	PA3
 USART2	Asynchronous	USART2_TX	PA2
 
@@ -54,6 +55,7 @@ SYS	Serial Wire	SYS_SWDIO	PA13
 SYS	SYS_WakeUp1	SYS_WKUP2	PC13
 SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
 SYS	Dead Battery Signals disabled	SYS_VS_DBSignals	VP_SYS_VS_DBSignals
+TIM2	Internal Clock	TIM2_VS_ClockSourceINT	VP_TIM2_VS_ClockSourceINT
 USART2	Asynchronous	USART2_RX	PA3
 USART2	Asynchronous	USART2_TX	PA2
 
@@ -86,7 +88,7 @@ SOFTWARE PROJECT
 
 Project Settings : 
 Project Name : snake_nokia5510
-Project Folder : /home/kacper/projects/snake_nokia5510
+Project Folder : D:\Programowanie\cwiczenia\snake\snake_nokia5510
 Toolchain / IDE : STM32CubeIDE
 Firmware Package Name and Version : STM32Cube FW_G0 V1.4.1
 
