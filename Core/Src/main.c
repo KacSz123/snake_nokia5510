@@ -190,6 +190,9 @@ int main(void)
   /* USER CODE BEGIN Init */
 node_Typedef snake;
 SNAKE_GAME_snakeHeadInit(40, 25, &snake);
+SNAKE_GAME_changeOrientation(&snake, RIGHT);
+SNAKE_GAME_addSnakeNode(&snake, 36, 25);
+SNAKE_GAME_addSnakeNode(&snake, 32, 25);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -218,7 +221,6 @@ LCD_NOKIA5510_initDefault(&hspi1);
 	LCD_NOKIA5510_drawLine2Points(20, 10, 70, 40);
 	SNAKE_GAME_drawSnake(&snake);
 	LCD_NOKIA5510_sendDataBuffer();
-	SNAKE_GAME_changeOrientation(&snake, RIGHT);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -253,7 +255,7 @@ LCD_NOKIA5510_initDefault(&hspi1);
 				SNAKE_GAME_changeOrientation(&snake, key);
 				tmp = key;
 			}
-			SNAKE_GAME_moveSnakeNode(&snake);
+			SNAKE_GAME_moveSnake(&snake);
 			LCD_NOKIA5510_clearScreen();
 			SNAKE_GAME_drawSnake(&snake);
 			LCD_NOKIA5510_sendDataBuffer();

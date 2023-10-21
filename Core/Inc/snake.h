@@ -43,7 +43,7 @@ void SNAKE_GAME_snakeHeadInit(int x, int y, node_Typedef *h);
 
 void SNAKE_GAME_removeSnake(node_Typedef *h);
 
-void SNAKE_GAME_moveSnake(node_Typedef *h, bool ifEaten, int orient);
+void SNAKE_GAME_moveSnake(node_Typedef *h/*, bool ifEaten, int orient*/);
 
 void SNAKE_GAME_moveSnakeNode(node_Typedef *h);
 void SNAKE_GAME_changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient);

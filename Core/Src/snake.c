@@ -20,11 +20,12 @@ void SNAKE_GAME_addSnakeNode(node_Typedef *h, int x, int y)
 	}
 	node_tmp->next = (node_Typedef *)malloc(sizeof(node_Typedef));
 
+
 	node_tmp->next->coords[0] = x;
 	node_tmp->next->coords[1] = y;
 	node_tmp->next->orientation = node_tmp->orientation;
 
-	// node_tmp->next->headFlag = false;
+	node_tmp->next->headFlag = false;
 	node_tmp->next->prev = node_tmp;
 	node_tmp->next->next = NULL;
 }
@@ -47,19 +48,19 @@ void SNAKE_GAME_moveSnakeNode(node_Typedef *h)
 {
 	switch (h->orientation) {
 	case UP:{
-		--(h->coords[1]);
+		(h->coords[1])-=4;
 		break;
 	}
 	case DOWN:{
-		++(h->coords[1]);
+		(h->coords[1])+=4;
 		break;
 	}
 	case LEFT:{
-		--(h->coords[0]);
+		(h->coords[0])-=4;
 		break;
 	}
 	case RIGHT:{
-		++(h->coords[0]);
+		(h->coords[0])+=4;
 		break;
 	}
 		default:
@@ -67,53 +68,22 @@ void SNAKE_GAME_moveSnakeNode(node_Typedef *h)
 	}
 
 }
-void SNAKE_GAME_moveSnake(node_Typedef *h, bool ifEaten, int orient)
+void SNAKE_GAME_moveSnake(node_Typedef *h/*, bool ifEaten, int orient*/)
 {
 	node_Typedef *node_tmp = h;
-	int tmp[2];
-	tmp[0] = node_tmp->coords[0];
-	tmp[1] = node_tmp->coords[1];
-
-	while (node_tmp->next != NULL)
+	SNAKE_GAME_moveSnakeNode(node_tmp);
+	while(node_tmp->next!=NULL)
 	{
 		node_tmp = node_tmp->next;
-
-		tmp[0] = node_tmp->coords[0];
-		tmp[1] = node_tmp->coords[1];
-
-	}
-	while(node_tmp->prev!=NULL)
+		SNAKE_GAME_moveSnakeNode(node_tmp);
+	};
+	while(node_tmp!=NULL)
 	{
-		node_tmp->coords[0] = node_tmp->prev->coords[0];
-		node_tmp->coords[1] = node_tmp->prev->coords[1];
-		node_tmp->orientation = node_tmp->prev->orientation;
+		SNAKE_GAME_changeOrientation(node_tmp, node_tmp->prev->orientation);
 		node_tmp = node_tmp->prev;
 	}
-	
-	if (ifEaten)
-	{
-		SNAKE_GAME_addSnakeNode(h, tmp[0], tmp[1]);
 
-	}
-	h->coords[0]+=1;
-	switch (orient)
-	{
-	case LEFT:
-		/* code */
-		break;
-	case RIGHT:
-		/* code */
-		break;
-	case UP:
-		/* code */
-		break;
-	case DOWN:
-		/* code */
-		break;
-	
-	default:
-		break;
-	}
+
 }
 
 void SNAKE_GAME_changeOrientation(node_Typedef *snake,SnakeOrientation_Typedef orient)
@@ -156,6 +126,8 @@ void SNAKE_GAME_drawSnakeNode(node_Typedef const  *snakeNode)
 		LCD_NOKIA5510_drawPixel(snakeNode->coords[0]+i, snakeNode->coords[1]-1);
 		LCD_NOKIA5510_drawPixel(snakeNode->coords[0]+i, snakeNode->coords[1]+2);
 	}
+	if(snakeNode->headFlag)
+		LCD_NOKIA5510_drawPixel(snakeNode->coords[0],snakeNode->coords[1]);
 }
 
 void SNAKE_GAME_drawSnake(node_Typedef *const snakeHead)
